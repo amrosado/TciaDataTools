@@ -225,7 +225,6 @@ class TciaDataSyncer:
                 seriesSizeFile = open('tciaSeriesSizes.json', mode='wb')
                 json.dump(self.apiSeriesSizes, seriesSizeFile)
 
-
         except:
             print('Failed to save objects into json')
 

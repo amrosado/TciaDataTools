@@ -45,8 +45,6 @@ class TciaApiClient:
         except:
             print('Problem with performing API Request')
 
-
-
     def getCollectionValues(self):
         queryEndpoint = '/query/getCollectionValues'
         queryParameters = {'format': self.apiFormat}
@@ -57,7 +55,7 @@ class TciaApiClient:
             return self.makeApiCall(queryUrl=queryUrl, queryParameters=queryParameters)
 
         except:
-            print('Problem with performing API Request')
+            raise Exception('Problem with returning collection values')
 
     def getModalityValues(self, collection=None, bodyPartExamined=None):
         queryEndpoint = '/query/getModalityValues'
@@ -74,7 +72,7 @@ class TciaApiClient:
             return self.makeApiCall(queryUrl=queryUrl, queryParameters=queryParameters)
 
         except:
-            print('Problem with performing API Request')
+            raise Exception('Problem with returning modality values')
 
     def getBodyPartValues(self, collection=None, modality=None):
         queryEndpoint = '/query/getBodyPartValues'
@@ -91,7 +89,7 @@ class TciaApiClient:
             return self.makeApiCall(queryUrl=queryUrl, queryParameters=queryParameters)
 
         except:
-            print('Problem with performing API Request')
+            raise Exception('Problem with returning body part values')
 
     def getManufacturerValues(self, collection=None, modality=None, bodyPartExamined=None):
         queryEndpoint = '/query/getManufacturerValues'
@@ -110,7 +108,7 @@ class TciaApiClient:
             return self.makeApiCall(queryUrl=queryUrl, queryParameters=queryParameters)
 
         except:
-            print('Problem with performing API Request')
+            raise Exception('Problem with returning manufacture values')
 
     def getPatient(self, collection=None):
         queryEndpoint = '/query/getPatient'
@@ -125,7 +123,7 @@ class TciaApiClient:
             return self.makeApiCall(queryUrl=queryUrl, queryParameters=queryParameters)
 
         except:
-            print('Problem with performing API Request')
+            raise Exception('Problem with returning patients by collection')
 
     def patientsByModality(self, collection, modality):
         queryEndpoint = '/query/PatientsByModality'
@@ -140,7 +138,7 @@ class TciaApiClient:
             return self.makeApiCall(queryUrl=queryUrl, queryParameters=queryParameters)
 
         except:
-            print('Problem with performing API Request')
+            raise Exception('Problem with returning patients by modality')
 
     def getPatientStudy(self, collection=None, patientId=None, studyInstanceUID=None):
         queryEndpoint = '/query/getPatientStudy'
@@ -159,7 +157,7 @@ class TciaApiClient:
             return self.makeApiCall(queryUrl=queryUrl, queryParameters=queryParameters)
 
         except:
-            print('Problem with performing API Request')
+            raise Exception('Problem with returning patient study')
 
     def getSeries(self, collection=None, studyInstanceUID=None, patientId=None, seriesInstanceUID=None, modality=None, bodyPartExamined=None, manufacturerModelName=None, manufacturer=None):
         queryEndpoint = '/query/getSeries'
@@ -188,7 +186,7 @@ class TciaApiClient:
             return self.makeApiCall(queryUrl=queryUrl, queryParameters=queryParameters)
 
         except:
-            print('Problem with performing API Request')
+            raise Exception('Problem with returning series')
 
     def getSeriesSize(self, seriesInstanceUID):
         queryEndpoint = '/query/getSeriesSize'
@@ -202,7 +200,7 @@ class TciaApiClient:
             return self.makeApiCall(queryUrl=queryUrl, queryParameters=queryParameters)
 
         except:
-            print('Problem with performing API Request')
+            raise Exception('Problem with returning series size')
 
     def getImage(self, seriesInstanceUID):
         queryEndpoint = '/query/getImage'
@@ -213,9 +211,37 @@ class TciaApiClient:
         queryParameters['SeriesInstanceUID'] = seriesInstanceUID
         try:
             return self.makeApiCall(queryUrl=queryUrl, queryParameters=queryParameters)
-
         except:
-            print('Problem with performing API Request')
+            raise Exception('Problem with returning series image zip')
+
+    def getSOPInstanceUIDs(self, seriesInstanceUID):
+        queryEndpoint = '/query/getSOPInstanceUIDs'
+        queryParameters = {'format': self.apiFormat}
+
+        queryUrl = self.apiResourceUrl + queryEndpoint
+
+        queryParameters['SeriesInstanceUID'] = seriesInstanceUID
+
+        try:
+            return self.makeApiCall(queryUrl=queryUrl, queryParameters=queryParameters)
+        except:
+            raise Exception('Problem with returning SOP Instances')
+
+    def getSingleImage(self, seriesInstanceUID=None, sopInstanceUID=None):
+        queryEndpoint = '/query/getSingleImage'
+        queryParameters = {'format': self.apiFormat}
+
+        queryUrl = self.apiResourceUrl + queryEndpoint
+
+        if sopInstanceUID != None:
+            queryParameters['SOPInstanceUID'] = sopInstanceUID
+        if seriesInstanceUID != None:
+            queryParameters['SeriesInstanceUID'] = seriesInstanceUID
+
+        try:
+            return self.makeApiCall(queryUrl=queryUrl, queryParameters=queryParameters)
+        except:
+            raise Exception('Problem with returning single DICOM object')
 
     def newPatientsInCollection(self, date, collection):
         queryEndpoint = '/query/NewPatientsInCollection'
@@ -230,7 +256,7 @@ class TciaApiClient:
             return self.makeApiCall(queryUrl=queryUrl, queryParameters=queryParameters)
 
         except:
-            print('Problem with performing API Request')
+            raise Exception('Problem with returning new patients in collection')
 
     def newStudiesInPatientCollection(self, date, collection, patientId=None):
         queryEndpoint = '/query/NewStudiesInPatientCollection'
@@ -248,7 +274,7 @@ class TciaApiClient:
             return self.makeApiCall(queryUrl=queryUrl, queryParameters=queryParameters)
 
         except:
-            print('Problem with performing API Request')
+            raise Exception('Problem with returning new studies in patient collection')
 
     def sharedList(self, name):
         queryEndpoint = '/query/ContentsByName'
@@ -261,7 +287,7 @@ class TciaApiClient:
         try:
             return self.makeApiCall(queryUrl=queryUrl, queryParameters=queryParameters)
         except:
-            print('Problem with performing API Request')
+            raise Exception('Problem with returning shared list')
 
     def __init__(self, apiKey, baseApiUrl, apiResource, apiFormat):
         self.apiKey = apiKey
