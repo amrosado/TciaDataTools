@@ -196,6 +196,75 @@ class TciaSync:
         except:
             raise Exception('Failed to retrieve and update patient zip images collection')
 
+    def retrieveAndUpdatePatientZipImagesBasedOnQuery(self, queryDic):
+        try:
+            #test = self.apiClient.getCollectionValues()
+            #self.tciaDb.drop_collection('tciaSeriesImagesZipFileList')
+            #self.tciaFilesGridDb.drop_collection('tciaSeriesImagesZip')
+            tciaSeriesImagesZipFileList = self.tciaDb.get_collection('tciaSeriesImagesZipFileList')
+            tciaSeriesImageZipGrid = gridfs.GridFS(self.tciaFilesGridDb, 'tciaSeriesImagesZip')
+            tciaPatientSeriesCollection = self.tciaDb.get_collection('tciaPatientSeries')
+            #tciaCollectionsCollection = self.tciaDb.get_collection('tciaCollections')
+
+            tciaManagedQuery = self.manageQuery(queryDic)
+
+            tciaPatientSeriesQuery = tciaPatientSeriesCollection.find(tciaManagedQuery)
+            #tciaQuery = tciaCollectionsCollection.find_one(tciaManagedQuery)
+
+            for tciaPatientSeries in tciaPatientSeriesQuery:
+                seriesZipFilename = tciaPatientSeries['SeriesInstanceUID'] + '.zip'
+                tciaSeriesZipFileListDict = self.buildImageZipFileListBaseInfo(tciaPatientSeries)
+                tciaZipImageFileListQuery = tciaSeriesImagesZipFileList.find(tciaSeriesZipFileListDict)
+                if tciaZipImageFileListQuery.count() > 0:
+                    for tciaZipImageFileInfo in tciaZipImageFileListQuery:
+                        if tciaZipImageFileInfo['active']:
+                            if tciaZipImageFileInfo['filename'] == seriesZipFilename:
+                                print 'Series zip file %s already into mongo grid' % (str(tciaSeriesZipFileListDict))
+                            elif tciaZipImageFileInfo['filename'] != seriesZipFilename:
+                                tciaImageZipApiQuery = self.apiClient.getImage(tciaPatientSeries['SeriesInstanceUID'])
+                                newTciaImageZipFile = tciaSeriesImageZipGrid.new_file()
+                                newTciaImageZipFile.write(tciaImageZipApiQuery)
+                                newTciaImageZipFile.filename = seriesZipFilename
+                                newTciaImageZipFile.close()
+                                tciaZipImageFileInfo['active'] = False
+                                tciaSeriesZipFileListDict['active'] = True
+                                tciaSeriesZipFileListDict['md5'] = newTciaImageZipFile.md5
+                                tciaSeriesZipFileListDict['filename'] = newTciaImageZipFile.filename
+                                tciaSeriesZipFileListDict['fileId'] = newTciaImageZipFile._id
+                                tciaSeriesImagesZipFileList.insert_one(tciaSeriesZipFileListDict)
+                                print 'Updating zip file for series zip file %s into mongo grid' % (str(tciaSeriesZipFileListDict))
+                else:
+                    tciaImageZipApiQuery = self.apiClient.getImage(tciaPatientSeries['SeriesInstanceUID'])
+                    newTciaImageZipFile = tciaSeriesImageZipGrid.new_file()
+                    newTciaImageZipFile.write(tciaImageZipApiQuery)
+                    newTciaImageZipFile.filename = seriesZipFilename
+                    newTciaImageZipFile.close()
+                    tciaSeriesZipFileListDict['active'] = True
+                    tciaSeriesZipFileListDict['md5'] = newTciaImageZipFile.md5
+                    tciaSeriesZipFileListDict['filename'] = newTciaImageZipFile.filename
+                    tciaSeriesZipFileListDict['fileId'] = newTciaImageZipFile._id
+                    tciaSeriesImagesZipFileList.insert_one(tciaSeriesZipFileListDict)
+                    print 'Added zip file for series zip file %s into mongo grid' % (str(tciaSeriesZipFileListDict))
+
+            return True
+
+        except:
+            raise Exception('Failed to retrieve and update patient zip images collection based on collection')
+
+    def manageQuery(self, queryDict):
+        mongoQuery = {}
+
+        for key in queryDict:
+            querySplit = queryDict[key].split('-')
+            if key == 'Collection':
+                if queryDict[key] == 'TCGA':
+                    mongoQuery[key] = {'$regex': 'TCGA.+'}
+                else:
+                    mongoQuery[key] = queryDict[key]
+            else:
+                mongoQuery[key] = queryDict[key]
+        return mongoQuery
+
     def buildImageZipFileListBaseInfo(self, tciaPatientSeries):
         fileListInfo = {}
         for name in tciaPatientSeries:
@@ -217,15 +286,16 @@ class TciaSync:
             raise Exception('Failed to retrieve and update single images collection')
 
     def syncTciaDb(self):
-        self.retrieveAndUpdateCollections()
-        self.retrieveAndUpdateModalities()
-        self.retrieveAndUpdateBodyParts()
-        self.retrieveAndUpdateManufactures()
-        self.retrieveAndUpdatePatients()
-        self.retrieveAndUpdatePatientStudies()
-        self.retrieveAndUpdatePatientSeriesSizes()
-        self.retrieveAndUpdatePatientSeries()
-        self.retrieveAndUpdatePatientZipImages()
+        # self.retrieveAndUpdateCollections()
+        # self.retrieveAndUpdateModalities()
+        # self.retrieveAndUpdateBodyParts()
+        # self.retrieveAndUpdateManufactures()
+        # self.retrieveAndUpdatePatients()
+        # self.retrieveAndUpdatePatientStudies()
+        # self.retrieveAndUpdatePatientSeriesSizes()
+        # self.retrieveAndUpdatePatientSeries()
+        # self.retrieveAndUpdatePatientZipImages()
+        self.retrieveAndUpdatePatientZipImagesBasedOnQuery({'Collection': 'TCGA'})
 
     def __init__(self, apiBaseUrl=None):
         self.apiClient = TciaApiClient(ApiKeyHolder.tciaApiKey, 'https://services.cancerimagingarchive.net/services/v3', 'TCIA', 'json')
