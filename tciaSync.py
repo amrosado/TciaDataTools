@@ -89,6 +89,27 @@ class TciaSync:
         except:
             raise Exception('Failed to retrieve and update patients')
 
+    def retrieveAndUpdatePatientStudiesBasedOnQuery(self, queryDic):
+        try:
+            tciaPatientStudiesCollection = self.tciaDb.get_collection('tciaPatientStudies')
+            tciaPatientCollection = self.tciaDb.get_collection('tciaPatients')
+
+            tciaManagedQuery = self.manageQuery(queryDic)
+
+            tciaPatientQuery = tciaPatientCollection.find(tciaManagedQuery)
+
+            for patient in tciaPatientQuery:
+                tciaPatientStudiesApiQuery = self.apiClient.getPatientStudy(patientId=patient['PatientID'])
+                for tciaPatientStudyDic in tciaPatientStudiesApiQuery:
+                    patientStudyQuery = tciaPatientStudiesCollection.find(tciaPatientStudyDic)
+                    if patientStudyQuery.count() > 0:
+                        print 'Patient study %s already in patient studies collection' % (str(tciaPatientStudyDic))
+                    else:
+                        tciaPatientStudiesCollection.insert_one(tciaPatientStudyDic)
+                        print 'Added patient study %s into patient studies collection' % (str(tciaPatientStudyDic))
+        except:
+            raise Exception('Failed to retrieve and update patient studies')
+
     def retrieveAndUpdatePatientStudies(self):
         try:
             tciaPatientStudiesCollection = self.tciaDb.get_collection('tciaPatientStudies')
@@ -108,6 +129,27 @@ class TciaSync:
         except:
             raise Exception('Failed to retrieve and update patient studies')
 
+    def retrieveAndUpdatePatientSeriesSizesBasedOnQuery(self, queryDic):
+        try:
+            tciaPatientSeriesSizeCollection = self.tciaDb.get_collection('tciaPatientSeriesSize')
+            tciaPatientStudiesCollection = self.tciaDb.get_collection('tciaPatientSeries')
+
+            tciaManagedQuery = self.manageQuery(queryDic)
+
+            tciaPatientSeriesQuery = tciaPatientStudiesCollection.find(tciaManagedQuery)
+
+            for tciaPatientSeries in tciaPatientSeriesQuery:
+                tciaPatientSeriesSizeApiQuery = self.apiClient.getSeriesSize(tciaPatientSeries['SeriesInstanceUID'])
+                for tciaPatientSeriesSizeDic in tciaPatientSeriesSizeApiQuery:
+                    patientSeriesSizeQuery = tciaPatientSeriesSizeCollection.find(tciaPatientSeriesSizeDic)
+                    if patientSeriesSizeQuery.count() > 0:
+                        print 'Patient series size %s already in patient series size collection' % (str(tciaPatientSeriesSizeDic))
+                    else:
+                        tciaPatientSeriesSizeCollection.insert_one(tciaPatientSeriesSizeDic)
+                        print 'Added series size %s into series size collection' % (str(tciaPatientSeriesSizeDic))
+        except:
+            raise Exception('Failed to retrieve and update patient series sizes collection')
+
     def retrieveAndUpdatePatientSeriesSizes(self):
         try:
             tciaPatientSeriesSizeCollection = self.tciaDb.get_collection('tciaPatientSeriesSize')
@@ -126,6 +168,27 @@ class TciaSync:
                         print 'Added series size %s into series size collection' % (str(tciaPatientSeriesSizeDic))
         except:
             raise Exception('Failed to retrieve and update patient series sizes collection')
+
+    def retrieveAndUpdatePatientSeriesBasedOnQuery(self, queryDic):
+        try:
+            tciaPatientSeriesCollection = self.tciaDb.get_collection('tciaPatientSeries')
+            tciaPatientStudiesCollection = self.tciaDb.get_collection('tciaPatientStudies')
+
+            tciaManagedQuery = self.manageQuery(queryDic)
+
+            tciaPatientStudiesQuery = tciaPatientStudiesCollection.find(tciaManagedQuery)
+
+            for tciaPatientStudy in tciaPatientStudiesQuery:
+                tciaPatientSeriesApiQuery = self.apiClient.getSeries(studyInstanceUID=tciaPatientStudy['StudyInstanceUID'])
+                for tciaPatientSeriesDic in tciaPatientSeriesApiQuery:
+                    patientSeriesSizeQuery = tciaPatientSeriesCollection.find(tciaPatientSeriesDic)
+                    if patientSeriesSizeQuery.count() > 0:
+                        print 'Patient series %s already in patient series collection' % (str(tciaPatientSeriesDic))
+                    else:
+                        tciaPatientSeriesCollection.insert_one(tciaPatientSeriesDic)
+                        print 'Added series %s into series collection' % (str(tciaPatientSeriesDic))
+        except:
+            raise Exception('Failed to retrieve and update patient series collection')
 
     def retrieveAndUpdatePatientSeries(self):
         try:
