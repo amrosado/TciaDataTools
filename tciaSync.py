@@ -111,12 +111,12 @@ class TciaSync:
     def retrieveAndUpdatePatientSeriesSizes(self):
         try:
             tciaPatientSeriesSizeCollection = self.tciaDb.get_collection('tciaPatientSeriesSize')
-            tciaPatientStudiesCollection = self.tciaDb.get_collection('tciaPatientStudies')
+            tciaPatientStudiesCollection = self.tciaDb.get_collection('tciaPatientSeries')
 
-            tciaPatientStudiesQuery = tciaPatientStudiesCollection.find()
+            tciaPatientSeriesQuery = tciaPatientStudiesCollection.find()
 
-            for tciaPatientStudy in tciaPatientStudiesQuery:
-                tciaPatientSeriesSizeApiQuery = self.apiClient.getSeriesSize(tciaPatientStudy['SeriesInstanceUID'])
+            for tciaPatientSeries in tciaPatientSeriesQuery:
+                tciaPatientSeriesSizeApiQuery = self.apiClient.getSeriesSize(tciaPatientSeries['SeriesInstanceUID'])
                 for tciaPatientSeriesSizeDic in tciaPatientSeriesSizeApiQuery:
                     patientSeriesSizeQuery = tciaPatientSeriesSizeCollection.find(tciaPatientSeriesSizeDic)
                     if patientSeriesSizeQuery.count() > 0:
@@ -292,10 +292,10 @@ class TciaSync:
         # self.retrieveAndUpdateManufactures()
         # self.retrieveAndUpdatePatients()
         # self.retrieveAndUpdatePatientStudies()
-        # self.retrieveAndUpdatePatientSeriesSizes()
+        self.retrieveAndUpdatePatientSeriesSizes()
         # self.retrieveAndUpdatePatientSeries()
         # self.retrieveAndUpdatePatientZipImages()
-        self.retrieveAndUpdatePatientZipImagesBasedOnQuery({'Collection': 'TCGA'})
+        # self.retrieveAndUpdatePatientZipImagesBasedOnQuery({'Collection': 'TCGA'})
 
     def __init__(self, apiBaseUrl=None):
         self.apiClient = TciaApiClient(ApiKeyHolder.tciaApiKey, 'https://services.cancerimagingarchive.net/services/v3', 'TCIA', 'json')
