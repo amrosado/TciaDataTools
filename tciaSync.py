@@ -349,16 +349,18 @@ class TciaSync:
             raise Exception('Failed to retrieve and update single images collection')
 
     def syncTciaDb(self):
-        # self.retrieveAndUpdateCollections()
+             
+	#self.retrieveAndUpdateCollections()
         # self.retrieveAndUpdateModalities()
         # self.retrieveAndUpdateBodyParts()
         # self.retrieveAndUpdateManufactures()
-        # self.retrieveAndUpdatePatients()
-        # self.retrieveAndUpdatePatientStudies()
-        self.retrieveAndUpdatePatientSeriesSizes()
-        # self.retrieveAndUpdatePatientSeries()
+        
+	#self.retrieveAndUpdatePatients()
+        #self.retrieveAndUpdatePatientStudiesBasedOnQuery({'Collection': 'TCGA'} )
+        # self.retrieveAndUpdatePatientSeriesSizes()
+        #self.retrieveAndUpdatePatientSeriesBasedOnQuery({'Collection': 'TCGA'} )
         # self.retrieveAndUpdatePatientZipImages()
-        # self.retrieveAndUpdatePatientZipImagesBasedOnQuery({'Collection': 'TCGA'})
+        self.retrieveAndUpdatePatientZipImagesBasedOnQuery({'Collection': 'TCGA-LGG'})
 
     def __init__(self, apiBaseUrl=None):
         self.apiClient = TciaApiClient(ApiKeyHolder.tciaApiKey, 'https://services.cancerimagingarchive.net/services/v3', 'TCIA', 'json')

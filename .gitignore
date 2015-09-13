@@ -3,3 +3,5 @@
 apikey.py
 *.dcm
 *.zip
+*.pyc
+*.*~
