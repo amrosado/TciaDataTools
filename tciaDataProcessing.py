@@ -37,11 +37,20 @@ class TciaDataProcessing:
             seriesImageZipGrid = tciaSeriesImageZipGrid.get(seriesImageZipFileInfo['fileId'])
             seriesImageZip = zipfile.ZipFile(seriesImageZipGrid)
 
+
+
             ### Images will be extracted into a default IMAGE_ROOT and into a directory tree
             ### Based on the first and second parts of the SeriesInstanceUID to avoid putting all files
             ### In the Same Directory
             SeriesInstanceUID = seriesImageZipFileInfo['SeriesInstanceUID']
-            
+
+            #check if NIFTI is generated for this SeriesUID
+            seriesImageNifti_Qry = self.tciaNiftiDb['Nifti_w_UID'].find_one({'SeriesInstanceUID': SeriesInstanceUID })
+            if seriesImageNifti_Qry:
+                print "Image already converted"
+                continue ### Go to next UID and see if it needs creation
+            else:
+                print "Need to Convert this image"
 
             ## CReate temporary locations for dicom and nifti files I create
             dicom_dir = tempfile.mkdtemp(dir=self.tmpdir)
@@ -78,9 +87,10 @@ class TciaDataProcessing:
 
             ### UPDATE NIFTI DATABASE TO INDICATE NIFTI FILE GENERATED FOR THIS SERIES UID
             #self.tciaNiftiDb = self.mongoDbClient.get_database('tciaNiftiData')
+            file_convert_dict = { 'nifti_file': nifti_cvt_info[0], 'SeriesInstanceUID': SeriesInstanceUID    }
 
-            print nifti_cvt_info
-            sys.exit()
+            self.tciaNiftiDb['Nifti_w_UID'].insert(file_convert_dict)
+            print nifti_cvt_info,"WAS INSERTED?"
             pass
             #seriesImageZipNameList = seriesImageZip.namelist()
             #dicomStack = dcmstack.DcmStack()

@@ -360,7 +360,7 @@ class TciaSync:
         # self.retrieveAndUpdatePatientSeriesSizes()
         #self.retrieveAndUpdatePatientSeriesBasedOnQuery({'Collection': 'TCGA'} )
         # self.retrieveAndUpdatePatientZipImages()
-        self.retrieveAndUpdatePatientZipImagesBasedOnQuery({'Collection': 'TCGA-LGG'})
+        self.retrieveAndUpdatePatientZipImagesBasedOnQuery({'Collection': 'TCGA-HNSC'})
 
     def __init__(self, apiBaseUrl=None):
         self.apiClient = TciaApiClient(ApiKeyHolder.tciaApiKey, 'https://services.cancerimagingarchive.net/services/v3', 'TCIA', 'json')
