@@ -1,0 +1,16 @@
+{
+  "name": "tciaFlask",
+  "version": "0.0.0",
+  "homepage": "https://github.com/amrosado/TciaDataTools",
+  "authors": [
+    "Aaron Rosado <aaron.rosado@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
