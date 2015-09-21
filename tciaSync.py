@@ -349,13 +349,12 @@ class TciaSync:
             raise Exception('Failed to retrieve and update single images collection')
 
     def syncTciaDb(self):
-             
-	#self.retrieveAndUpdateCollections()
+        #self.retrieveAndUpdateCollections()
         # self.retrieveAndUpdateModalities()
         # self.retrieveAndUpdateBodyParts()
         # self.retrieveAndUpdateManufactures()
         
-	#self.retrieveAndUpdatePatients()
+	    #self.retrieveAndUpdatePatients()
         #self.retrieveAndUpdatePatientStudiesBasedOnQuery({'Collection': 'TCGA'} )
         # self.retrieveAndUpdatePatientSeriesSizes()
         #self.retrieveAndUpdatePatientSeriesBasedOnQuery({'Collection': 'TCGA'} )

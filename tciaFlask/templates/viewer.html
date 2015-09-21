@@ -1,0 +1,37 @@
+{% include 'header.html' with context %}
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-1">
+                <div class="list-group" id="collections">
+                {% if tciaCollections %}
+                    {% for collection in tciaCollections %}
+                        <button type="button" class="list-group-item" onclick="queryCollectionPatients('{{collection.id}}')">{{collection.name}}</button>
+                    {% endfor %}
+                {% endif %}
+                </div>
+            </div>
+            <div class="col-md-1">
+                <div class="list-group" id="patients">
+
+                </div>
+            </div>
+            <div class="col-md-1">
+                <div class="list-group" id="studies">
+
+                </div>
+            </div>
+            <div class="col-md-1">
+                <div class="list-group" id="series">
+
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="list-group" id="seriesView">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+{% include 'footer.html' with context %}
