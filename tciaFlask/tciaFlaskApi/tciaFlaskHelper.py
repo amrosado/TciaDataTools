@@ -9,6 +9,7 @@ class TciaFlaskHelper:
         templateVariables = {}
         templateVariables['bootstrapCssUrl'] = '/static/bower_components/bootstrap/dist/css/bootstrap.css'
         templateVariables['fontawesomeCssUrl'] = '/static/bower_components/font-awesome/css/font-awesome.css'
+        templateVariables['tciaViewerCssUrl'] = '/static/css/tciaViewer.css'
         templateVariables['bootstrapJsUrl'] = '/static/bower_components/bootstrap/dist/js/bootstrap.js'
         templateVariables['html5shivJsUrl'] = '/static/bower_components/html5shiv/dist/html5shiv.js'
         templateVariables['respondJsUrl'] = '/static/bower_components/respond/src/respond.js'

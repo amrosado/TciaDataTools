@@ -15,9 +15,6 @@ tciaMongoDbHelper = TciaMongoDbHelper()
 
 @app.route('/')
 def index():
-    templateVars = {}
-    tableComponents = tciaFlaskViewHelper.initialTableSetup()
-    renderedTemplate = render_template('tables.html')
     return 'Hello world!'
 
 @app.route('/view')

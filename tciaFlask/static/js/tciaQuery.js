@@ -20,6 +20,12 @@ var updatePatientPanel = function(patientsJson) {
     studyDiv.empty();
     seriesViewDiv = $('#seriesView');
     seriesViewDiv.empty();
+
+    browserHeight = $( window).height();
+    heightForScroll = browserHeight - 100;
+
+    patientDiv.css('height', heightForScroll);
+
     for(patient in patientsJson) {
         //console.log(patientsJson[patient]);
         buttonStr = '<button class="list-group-item" onclick="queryPatientStudies(';
@@ -41,6 +47,12 @@ var updateSeriesPanel = function(seriesJson) {
     seriesDiv.empty();
     seriesViewDiv = $('#seriesView');
     seriesViewDiv.empty();
+
+    browserHeight = $( window).height();
+    heightForScroll = browserHeight - 100;
+
+    seriesDiv.css('height', heightForScroll);
+
     for(series in seriesJson) {
         buttonStr = '<button class="list-group-item" onclick="querySeries(';
         buttonStr += "'";
@@ -60,6 +72,12 @@ var updateSeriesViewPanel = function(seriesJson) {
     seriesViewDiv.empty();
     ulStr = '<ul class="list-group"></ul>';
     list = seriesViewDiv.append($(ulStr));
+
+    browserHeight = $( window).height();
+    heightForScroll = browserHeight - 100;
+
+    seriesViewDiv.css('height', heightForScroll);
+
     for(seriesDescription in seriesJson) {
         listInsert = '<div class="list-group-item"><h4 class="list-group-item-heading">';
         listInsert += seriesDescription;
@@ -78,6 +96,12 @@ var updateStudyPanel = function(studiesJson) {
     seriesDiv.empty();
     seriesViewDiv = $('#seriesView');
     seriesViewDiv.empty();
+
+    browserHeight = $( window).height();
+    heightForScroll = browserHeight - 100;
+
+    studyDiv.css('height', heightForScroll);
+
     for(study in studiesJson) {
         buttonStr = '<button class="list-group-item" onclick="queryStudySeries(';
         buttonStr += "'";

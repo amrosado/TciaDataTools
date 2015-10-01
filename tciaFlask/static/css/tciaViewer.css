@@ -1,0 +1,30 @@
+body {
+    margin-top: 2%;
+    background-color: #000000;
+}
+
+#patients {
+    margin-top: 2%;
+    overflow: auto;
+}
+
+#collections {
+    margin-top: 2%;
+    overflow: auto;
+}
+
+#studies {
+    margin-top: 2%;
+    overflow: auto;
+}
+
+#series {
+    margin-top: 2%;
+    overflow: auto;
+}
+
+#seriesView {
+    margin-top: 2%;
+    overflow: auto;
+}
+

@@ -1,8 +1,21 @@
 {% include 'header.html' with context %}
+<header>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-left">
+                <a class="navbar-brand" href="#">TCIA</a>
+            </div>
+        </div>
+    </nav>
+</header>
 <body>
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-1">
+                <div class="input-group">
+                    <span class="input-group-addon glyphicon glyphicon-search"></span>
+                    <input type="text" class="form-control" placeholder="Search">
+                </div>
                 <div class="list-group" id="collections">
                 {% if tciaCollections %}
                     {% for collection in tciaCollections %}
@@ -11,22 +24,37 @@
                 {% endif %}
                 </div>
             </div>
-            <div class="col-md-1">
+            <div class="col-md-2">
+                <div class="input-group" id="patientSearch">
+                    <span class="input-group-addon glyphicon glyphicon-search"></span>
+                    <input type="text" class="form-control" placeholder="Search">
+                </div>
                 <div class="list-group" id="patients">
-
                 </div>
             </div>
             <div class="col-md-1">
+                <div class="input-group">
+                    <span class="input-group-addon glyphicon glyphicon-search"></span>
+                    <input type="text" class="form-control" placeholder="Search">
+                </div>
                 <div class="list-group" id="studies">
 
                 </div>
             </div>
             <div class="col-md-1">
+                <div class="input-group">
+                    <span class="input-group-addon glyphicon glyphicon-search"></span>
+                    <input type="text" class="form-control" placeholder="Search">
+                </div>
                 <div class="list-group" id="series">
 
                 </div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-7">
+                <div class="input-group">
+                    <span class="input-group-addon glyphicon glyphicon-search"></span>
+                    <input type="text" class="form-control" placeholder="Search">
+                </div>
                 <div class="list-group" id="seriesView">
 
                 </div>
